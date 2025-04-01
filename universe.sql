@@ -1,14 +1,15 @@
 CREATE TABLE galaxy (
-    galaxy_id INT NOT NULL UNIQUE,
-    name VARCHAR(30),
+    galaxy_id INT NOT NULL,
+    name VARCHAR(30) UNIQUE,
     galaxy_types TEXT,
-    has_life BOOLEAN CHECK (has_life IN (0, 1)),
-    distance_from_earth NUMERIC, 
+    has_life BOOLEAN,
+    distance_from_earth NUMERIC NOT NULL, 
 
+    UNIQUE(galaxy_id),
     PRIMARY KEY(galaxy_id)
 );
 
-INSERT INTO galaxy(galaxy_id,name,galaxy_type,has_life,distance_from_earth)
+INSERT INTO galaxy(galaxy_id,name,galaxy_types,has_life,distance_from_earth)
 VALUES (1000, 'Milky Way', 'Spiral',true,0),
 (1001, 'Andromeda', 'Spiral',false,25000000),(1010, 'Messier 87', 'Elliptical',true,12000000),
 (1011, 'Centaurus A', 'Elliptical',false,12000000),(1100, 'Cartwheel Glaxy', 'Lenticular',true,500000000),
@@ -16,30 +17,32 @@ VALUES (1000, 'Milky Way', 'Spiral',true,0),
 
 CREATE TABLE star (
     galaxy_id INT,
-    star_id INT NOT NULL UNIQUE,
-    name VARCHAR(30),
+    star_id INT NOT NULL,
+    name VARCHAR(30) UNIQUE,
     star_type TEXT,
-    distance_from_earth_light_years FLOAT,
+    distance_from_earth_light_years INT NOT NULL,
 
+    UNIQUE(star_id),
     PRIMARY KEY(star_id),
     FOREIGN KEY(galaxy_id) REFERENCES galaxy(galaxy_id)
 );
 
 INSERT INTO star(galaxy_id,star_id,name,star_type,distance_from_earth_light_years)
-VALUES (1000,0001,'Sun','Yellow Dwarf',0.0),
-(1000,0002,'Proxima Centauri','Red Dwarf',4.24),
-(1001,0003,'N31-42','Blue Supergiant',10.0),
-(1101,0004,'R136a1','Wolf-Rayet Star',34.2),
-(1010,0005,'M87 Star','Cluster Stars', 52.4),
-(1100,0006,'Roller Blue','Massive Blue Stars',12.5);
+VALUES (1000,0001,'Sun','Yellow Dwarf',0),
+(1000,0002,'Proxima Centauri','Red Dwarf',4),
+(1001,0003,'N31-42','Blue Supergiant',10),
+(1101,0004,'R136a1','Wolf-Rayet Star',34),
+(1010,0005,'M87 Star','Cluster Stars', 52),
+(1100,0006,'Roller Blue','Massive Blue Stars',12);
 
 CREATE TABLE planet(
     star_id INT,
-    planet_id INT NOT NULL UNIQUE,
-    name VARCHAR(30),
+    planet_id INT NOT NULL,
+    name VARCHAR(30) UNIQUE,
     planet_type TEXT,
-    distance_from_earth_light_years NUMERIC,
+    distance_from_earth_light_years INT NOT NULL,
 
+    UNIQUE(planet_id),
     PRIMARY KEY(planet_id),
     FOREIGN KEY (star_id) REFERENCES star(star_id)
 );
@@ -60,12 +63,13 @@ VALUES (0001, 110, 'Earth', 'Terrestrial', 0),
 
 CREATE TABLE moon (
     planet_id INT,
-    moon_id INT NOT NULL UNIQUE,
-    name VARCHAR(30),
+    moon_id INT NOT NULL,
+    name VARCHAR(30) UNIQUE,
     moon_type TEXT,
-    distance_from_earth NUMERIC,
+    distance_from_earth INT NOT NULL,
     still_as_a_moon BOOLEAN,
 
+    UNIQUE(moon_id),
     PRIMARY KEY(moon_id),
     FOREIGN KEY (planet_id) REFERENCES planet(planet_id)
 );
@@ -91,3 +95,17 @@ VALUES (110, 210, 'Earth Moon', 'Natural Satellite', 384400, true),
 (116, 227, 'Phobos', 'Rocky Moon', 9.4, true),
 (116, 228, 'Deimos', 'Rocky Moon', 23.5, true),
 (118, 229, 'Enceladus Moon', 'Icy Moon', 1.2, true);
+
+CREATE TABLE black_hole (
+    black_hole_id INT NOT NULL,
+    name VARCHAR(30) NOT NULL,
+    age INT UNIQUE,
+
+    UNIQUE(black_hole_id),
+    PRIMARY KEY (black_hole_id)
+);
+
+INSERT INTO black_hole(black_hole_id,name,age)
+VALUES(310, 'Black Hole', 200000),
+(311,'White Hole', 5001001),
+(312, 'Blue Hole', 6000002);
